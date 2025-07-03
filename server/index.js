@@ -1,18 +1,20 @@
+// server/index.js
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import fetch from "node-fetch";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
 
 mongoose
-  .connect(
-    "mongodb+srv://rohitvilhekar100:rohiT%409526@cluster0.3nhu3qk.mongodb.net/authdb?retryWrites=true&w=majority&appName=Cluster0"
-  )
+  .connect(process.env.MONGO_URL)
   .then(() => console.log("✅ MongoDB connected"))
   .catch((err) => console.error("❌ MongoDB error:", err));
 
@@ -23,7 +25,6 @@ const historySchema = new mongoose.Schema({
 
 const History = mongoose.model("History", historySchema);
 
-// ✅ Fetch Weather + Save History
 app.get("/api/weather", async (req, res) => {
   const city = req.query.city;
   if (!city) return res.json({ error: "City is required" });
@@ -37,17 +38,25 @@ app.get("/api/weather", async (req, res) => {
 
     if (data.cod !== 200) return res.json({ error: "City not found" });
 
-    // ✅ Save search history
-    const newEntry = new History({ city: data.name });
-    await newEntry.save();
-
     res.json(data);
   } catch {
     res.status(500).json({ error: "Failed to fetch weather" });
   }
 });
 
-// ✅ Get Search History
+app.post("/api/history", async (req, res) => {
+  const { city } = req.body;
+  if (!city) return res.status(400).json({ error: "City is required" });
+
+  try {
+    const newEntry = new History({ city });
+    await newEntry.save();
+    res.json({ message: "Saved" });
+  } catch {
+    res.status(500).json({ error: "Failed to save history" });
+  }
+});
+
 app.get("/api/history", async (req, res) => {
   try {
     const history = await History.find().sort({ timestamp: -1 }).limit(10);
@@ -57,7 +66,6 @@ app.get("/api/history", async (req, res) => {
   }
 });
 
-// ✅ Clear History
 app.delete("/api/history/clear", async (req, res) => {
   try {
     await History.deleteMany({});
