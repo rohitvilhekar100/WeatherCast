@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import CurrentWeather from "./components/CurrentWeather";
 import SearchHistory from "./components/SearchHistory";
-import "./App.css";
 
 function App() {
   const [refresh, setRefresh] = useState(false);
@@ -12,6 +11,7 @@ function App() {
 
   return (
     <div className="app-container">
+      <h1 className="title">🌤️ WeatherCast</h1>
       <CurrentWeather onSearch={handleSearch} />
       <SearchHistory refresh={refresh} />
     </div>
@@ -19,16 +19,3 @@ function App() {
 }
 
 export default App;
-
-// import React from "react";
-// import CurrentWeather from "./components/CurrentWeather";
-
-// function App() {
-//   return (
-//     <div>
-//       <CurrentWeather />
-//     </div>
-//   );
-// }
-
-// export default App;

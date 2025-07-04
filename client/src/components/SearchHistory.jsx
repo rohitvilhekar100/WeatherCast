@@ -8,6 +8,7 @@ const SearchHistory = ({ refresh }) => {
     try {
       const res = await fetch("http://localhost:5000/api/history");
       const data = await res.json();
+      console.log("Fetched history:", data); // Debug log
       setHistory(data);
     } catch {
       console.error("Failed to fetch history");

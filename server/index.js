@@ -13,8 +13,6 @@ const MONGO_URL = process.env.MONGO_URL;
 app.use(cors());
 app.use(express.json());
 
-console.log("Mongo URL:", MONGO_URL);
-
 mongoose
   .connect(MONGO_URL)
   .then(() => console.log("✅ MongoDB connected"))
@@ -31,7 +29,7 @@ app.get("/api/weather", async (req, res) => {
   const city = req.query.city;
   if (!city) return res.json({ error: "City is required" });
 
-  const apiKey = "21a6874536092db1fe586ca83f094e7c";
+  const apiKey = process.env.OPENWEATHER_API_KEY;
   const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
 
   try {
