@@ -6,9 +6,9 @@ const SearchHistory = ({ refresh }) => {
 
   const fetchHistory = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/history");
+      const res = await fetch("https://weathercast-backend-6atw.onrender.com/api/history");
       const data = await res.json();
-      console.log("Fetched history:", data); // Debug log
+      console.log("Fetched history:", data);
       setHistory(data);
     } catch {
       console.error("Failed to fetch history");
@@ -17,7 +17,7 @@ const SearchHistory = ({ refresh }) => {
 
   const handleClear = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/history/clear", {
+      const res = await fetch("https://weathercast-backend-6atw.onrender.com/api/history/clear", {
         method: "DELETE",
       });
       if (res.ok) {
@@ -50,4 +50,3 @@ const SearchHistory = ({ refresh }) => {
 };
 
 export default SearchHistory;
-

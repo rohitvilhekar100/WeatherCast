@@ -10,14 +10,14 @@ const CurrentWeather = ({ onSearch }) => {
     setError("");
     setWeather(null);
     try {
-      const res = await fetch(`http://localhost:5000/api/weather?city=${city}`);
+      const res = await fetch(`https://weathercast-backend-6atw.onrender.com/api/weather?city=${city}`);
       const data = await res.json();
 
       if (data.error) {
         setError(data.error);
       } else {
         setWeather(data);
-        await fetch("http://localhost:5000/api/history", {
+        await fetch("https://weathercast-backend-6atw.onrender.com/api/history", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ city }),
